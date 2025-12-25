@@ -11,16 +11,16 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-/* ---------------- ESM dirname fix ---------------- */
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-/* ---------------- Middleware ---------------- */
 app.use(express.json());
 
-/* ---------------- Production: Serve Frontend ---------------- */
+/* ---- FRONTEND ---- */
 if (process.env.NODE_ENV === "production") {
     const frontendPath = path.join(__dirname, "../../frontend/dist");
+
+    console.log("Serving frontend from:", frontendPath);
 
     app.use(express.static(frontendPath));
 
@@ -29,11 +29,10 @@ if (process.env.NODE_ENV === "production") {
     });
 }
 
-/* ---------------- API Routes ---------------- */
+/* ---- API ---- */
 app.use("/api/auth", authRoutes);
 app.use("/api/messages", messageRoutes);
 
-/* ---------------- Start Server ---------------- */
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
 });
